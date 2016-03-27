@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+require 'webrick'
+
+config = {
+    :Port => 3000,
+    :DocumentRoot => 'app',
+    :ServerName => 'local.dev'
+}
+
+server = WEBrick::HTTPServer.new config
+
+trap ('SIGINT') do
+  next if @stopping
+
+  @stopping = true
+
+  print "\r"
+  server.shutdown
+end
+
+@stopping = false
+
+server.start
